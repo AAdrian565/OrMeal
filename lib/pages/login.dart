@@ -1,13 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:ormeal/module/textinput.dart';
-import '../main.dart';
+import 'main.dart';
 import '../module/animation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class Login extends StatelessWidget {
-  Login({super.key});
+class LoginPage extends StatefulWidget {
+  LoginPage({super.key});
 
-  final usernameController = TextEditingController();
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  void printhello() {
+    print('hello');
+  }
+
+  void signUserIn() async {
+    print("Login button Pressed");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      print('signed in');
+    } on FirebaseAuthException catch (e) {
+      print("ERROR SIGN IN");
+      if ((e.code == 'user-not-found') || (e.code == 'wrong-password')) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return const AlertDialog(
+                title: Text("Error"),
+              );
+            });
+      }
+    }
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +62,8 @@ class Login extends StatelessWidget {
             const SizedBox(height: 10),
             // username
             TextInput(
-              controller: usernameController,
-              hintText: 'Username',
+              controller: emailController,
+              hintText: 'Email',
             ),
             // password
             TextInput(
@@ -43,19 +84,18 @@ class Login extends StatelessWidget {
               ),
             ),
 
-            Container(
-              padding: EdgeInsets.all(10.0),
-              child: ElevatedButton(
-                child: const Text('Login'),
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(150, 35),
-                  shape: StadiumBorder(),
-                ),
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(Slide(const MainPage(), const Offset(0.0, 1.0)));
-                },
+            ElevatedButton(
+              child: const Text('Login'),
+              style: ElevatedButton.styleFrom(
+                fixedSize: const Size(150, 35),
+                shape: StadiumBorder(),
               ),
+              onPressed: () {
+                // printhello();
+                signUserIn();
+                // Navigator.of(context)
+                //     .push(Slide(const MainPage(), const Offset(0.0, 1.0)));
+              },
             ),
             // or continue with
             Padding(
@@ -92,7 +132,7 @@ class Login extends StatelessWidget {
                     iconSize: 35,
                     color: Colors.blue,
                     onPressed: () {
-                      Navigator.of(context).push(_RouteMainPage());
+                      Navigator.of(context).push(_RouteHomePage());
                     },
                   ),
                 ),
@@ -110,6 +150,6 @@ class Login extends StatelessWidget {
   }
 }
 
-Route _RouteMainPage() {
+Route _RouteHomePage() {
   return Slide(const MainPage(), const Offset(0.0, 1.0));
 }

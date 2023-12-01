@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "936209742885",
+    "project_id": "ormeal",
+    "storage_bucket": "ormeal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936209742885:android:bd377f283997ea2f8c13cc",
+        "android_client_info": {
+          "package_name": "com.example.ormeal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK8F6dH30uG91PekR6owtSgL4F7BMRubA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
