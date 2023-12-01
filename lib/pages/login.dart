@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:ormeal/module/textinput.dart';
 import '../main.dart';
 import '../module/animation.dart';
 
 class Login extends StatelessWidget {
-  const Login({super.key});
+  Login({super.key});
+
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -13,34 +17,32 @@ class Login extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(10.0),
-              child: Text('Oatmeal'),
+            Text('Oatmeal'),
+            const SizedBox(height: 10),
+            // username
+            TextInput(
+              controller: usernameController,
+              hintText: 'Username',
             ),
-            Container(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Enter your username',
+            // password
+            TextInput(
+              controller: passwordController,
+              hintText: 'Password',
+              obscureText: true,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    child: const Text('Forgot password?'),
+                    onPressed: () {},
                   ),
-                ),
+                ],
               ),
             ),
-            Container(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Enter your Password',
-                  ),
-                ),
-              ),
-            ),
+
             Container(
               padding: EdgeInsets.all(10.0),
               child: ElevatedButton(
@@ -55,9 +57,30 @@ class Login extends StatelessWidget {
                 },
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(20.0),
-              child: Text('Or login with'),
+            // or continue with
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 50.0, vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: Colors.black,
+                      thickness: 0.5,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Text('Or Continue with'),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: Colors.black,
+                      thickness: 0.5,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -73,16 +96,10 @@ class Login extends StatelessWidget {
                     },
                   ),
                 ),
-                Container(
-                  color: Colors.transparent,
-                  child: IconButton(
-                    icon: const Icon(Icons.g_mobiledata_rounded),
-                    iconSize: 35,
-                    color: Colors.red,
-                    onPressed: () {
-                      Navigator.of(context).push(_RouteMainPage());
-                    },
-                  ),
+                Image.asset(
+                  'lib/images/google.png',
+                  width: 30,
+                  height: 30,
                 ),
               ],
             )

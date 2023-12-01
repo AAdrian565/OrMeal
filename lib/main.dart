@@ -13,7 +13,7 @@ class Ormeal extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true),
-      home: const Login(),
+      home: Login(),
     );
   }
 }
@@ -38,13 +38,15 @@ class _MainPage extends State<MainPage> {
 
   Widget buildBody() {
     final ThemeData theme = Theme.of(context);
-    return IndexedStack(
-      index: currentPageIndex,
-      children: <Widget>[
-        buildHomePage(theme),
-        buildNotificationsPage(theme),
-        buildMessagesPage(theme),
-      ],
+    return SafeArea(
+      child: IndexedStack(
+        index: currentPageIndex,
+        children: <Widget>[
+          buildHomePage(theme),
+          buildNotificationsPage(theme),
+          buildMessagesPage(theme),
+        ],
+      ),
     );
   }
 
