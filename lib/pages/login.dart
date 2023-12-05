@@ -35,115 +35,182 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       );
       print('signed in');
+      Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
       print("ERROR SIGN IN");
+      Navigator.of(context).pop();
       if ((e.code == 'user-not-found') || (e.code == 'wrong-password')) {
         showDialog(
             context: context,
             builder: (context) {
               return const AlertDialog(
-                title: Text("Error"),
+                backgroundColor: Colors.blue,
+                title: Center(
+                  child: Text(
+                    'Error',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               );
             });
       }
     }
-    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text('Oatmeal'),
-            const SizedBox(height: 10),
-            // username
-            TextInput(
-              controller: emailController,
-              hintText: 'Email',
-            ),
-            // password
-            TextInput(
-              controller: passwordController,
-              hintText: 'Password',
-              obscureText: true,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    child: const Text('Forgot password?'),
-                    onPressed: () {},
-                  ),
-                ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                'lib/images/OrMeal.png',
+                width: 100,
+                height: 100,
               ),
-            ),
-
-            ElevatedButton(
-              child: const Text('Login'),
-              style: ElevatedButton.styleFrom(
-                fixedSize: const Size(150, 35),
-                shape: StadiumBorder(),
+              Text(
+                'OrMeal',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-              onPressed: () {
-                // printhello();
-                signUserIn();
-                // Navigator.of(context)
-                //     .push(Slide(const MainPage(), const Offset(0.0, 1.0)));
-              },
-            ),
-            // or continue with
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 50.0, vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: Colors.black,
-                      thickness: 0.5,
+              const SizedBox(height: 80),
+              Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 10),
+              // username
+              TextInput(
+                controller: emailController,
+                hintText: 'Email',
+              ),
+              // password
+              TextInput(
+                controller: passwordController,
+                hintText: 'Password',
+                obscureText: true,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {},
                     ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text('Or Continue with'),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      color: Colors.black,
-                      thickness: 0.5,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  color: Colors.transparent,
-                  child: IconButton(
-                    icon: const Icon(Icons.facebook),
-                    iconSize: 35,
-                    color: Colors.blue,
-                    onPressed: () {
-                      Navigator.of(context).push(_RouteHomePage());
+              const SizedBox(height: 40),
+              ElevatedButton(
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                    color: Colors.green, // Set text color to white
+                    fontSize: 25, // Set text size to 16
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(150, 35),
+                  shape: StadiumBorder(),
+                ),
+                onPressed: () {
+                  signUserIn();
+                },
+              ),
+              ElevatedButton(
+                child: const Text(
+                  'Register',
+                  style: TextStyle(
+                    color: Colors.green, // Set text color to white
+                    fontSize: 25, // Set text size to 16
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(150, 35),
+                  shape: StadiumBorder(),
+                ),
+                onPressed: () {
+                  signUserIn();
+                },
+              ),
+              // or continue with
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: Colors.white,
+                        thickness: 2,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        'Or Continue with',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.white,
+                        thickness: 2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      print('Logo Clicked!');
                     },
-                  ),
-                ),
-                Image.asset(
-                  'lib/images/google.png',
-                  width: 30,
-                  height: 30,
-                ),
-              ],
-            )
-          ],
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(180.0),
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          'lib/images/google.png',
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
