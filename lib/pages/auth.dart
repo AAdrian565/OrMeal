@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ormeal/pages/login.dart';
+import 'package:ormeal/pages/login_or_register.dart';
 import 'package:ormeal/pages/main.dart';
 
 class AuthPage extends StatelessWidget {
@@ -19,7 +19,7 @@ class AuthPage extends StatelessWidget {
           if (snapshot.hasData) {
             return MainPage();
           } else {
-            return LoginPage();
+            return LoginOrRegisterPage();
           }
         },
       ),

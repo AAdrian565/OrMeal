@@ -2,24 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:ormeal/module/textinput.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  LoginPage({super.key, required this.onTap});
+  RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-  void printhello() {
-    print('hello');
-  }
-
-  void signUserIn() async {
-    print("Login button Pressed");
+  void signUserUp() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -29,11 +25,15 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      print('signed in');
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        print('signed up');
+      } else {
+        print('passwords do not match');
+      }
       Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
       print("ERROR SIGN IN");
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               Text(
-                'Login',
+                'Register',
                 style: TextStyle(
                   fontSize: 50,
                   fontWeight: FontWeight.bold,
@@ -133,23 +133,27 @@ class _LoginPageState extends State<LoginPage> {
                 hintText: 'Password',
                 obscureText: true,
               ),
+              const SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                padding: const EdgeInsets.symmetric(horizontal: 45.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    TextButton(
-                      child: const Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
+                    const Text(
+                      'Confirm Password',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
-                      onPressed: () {},
                     ),
                   ],
                 ),
+              ),
+              TextInput(
+                controller: confirmPasswordController,
+                hintText: 'Confirm Password',
+                obscureText: true,
               ),
               const SizedBox(height: 10),
               Row(
@@ -158,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   ElevatedButton(
                     child: const Text(
-                      'Login',
+                      'Register',
                       style: TextStyle(
                         color: Colors.green, // Set text color to white
                         fontSize: 25, // Set text size to 16
@@ -169,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                       shape: StadiumBorder(),
                     ),
                     onPressed: () {
-                      signUserIn();
+                      signUserUp();
                     },
                   ),
                 ],
@@ -238,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'Not a member?  ',
+                    'Already a member?  ',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -248,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
                   GestureDetector(
                     onTap: widget.onTap,
                     child: const Text(
-                      'Sign Up',
+                      'Login',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
