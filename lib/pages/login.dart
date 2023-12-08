@@ -90,44 +90,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 10),
               // username
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 45.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Email',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               TextInput(
                 controller: emailController,
                 hintText: 'Email',
               ),
               // password
               const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 45.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Password',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               TextInput(
                 controller: passwordController,
                 hintText: 'Password',

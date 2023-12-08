@@ -1,41 +1,57 @@
 import 'package:flutter/material.dart';
 
 class TextInput extends StatelessWidget {
-  final controller;
+  final TextEditingController controller;
   final String hintText;
   final bool obscureText;
 
-  const TextInput(
-      {super.key,
-      required this.controller,
-      required this.hintText,
-      this.obscureText = false});
+  const TextInput({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    this.obscureText = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 45.0, vertical: 5),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        style: TextStyle(color: Colors.white), // Set text color to white
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.circular(
-                90.0), // Set border radius for default state
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 45.0),
+          child: Text(
+            hintText,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.circular(
-                90.0), // Set border radius for default state
-          ),
-          hintText: hintText,
-          hintStyle: TextStyle(
-              color: Colors.white
-                  .withOpacity(0.5)), // Set placeholder color to white
         ),
-      ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 45.0, vertical: 5),
+          child: TextFormField(
+            controller: controller,
+            obscureText: obscureText,
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 2.0),
+                borderRadius: BorderRadius.circular(90.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 2.0),
+                borderRadius: BorderRadius.circular(90.0),
+              ),
+              labelText: hintText,
+              labelStyle: TextStyle(
+                color: Colors.white.withOpacity(0.5),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
+
