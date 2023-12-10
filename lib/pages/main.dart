@@ -51,7 +51,8 @@ class _MainPage extends State<MainPage> {
           currentPageIndex = index;
         });
       },
-      indicatorColor: Colors.blue,
+      backgroundColor: Colors.green,
+      // indicatorColor: Colors.blue,
       selectedIndex: currentIndex,
       destinations: const <Widget>[
         NavigationDestination(
@@ -70,8 +71,8 @@ class _MainPage extends State<MainPage> {
           ),
           label: 'Messages',
         ),
-        // Logout  button
       ],
     );
   }
 }
+

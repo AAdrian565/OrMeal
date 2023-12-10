@@ -16,29 +16,70 @@ class HomePage extends StatelessWidget {
 
     return Material(
       child: Card(
-        shadowColor: Colors.transparent,
-        margin: const EdgeInsets.all(8.0),
         child: SizedBox.expand(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  user?.email ?? 'Unknown User',
-                  style: theme.textTheme.titleLarge,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 120),
+                  Text(
+                    user?.email ?? 'Unknown User',
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: signUserOut, child: Text('Logout')),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 60),
+              Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    'Today Tips',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+              Container(
+                height: 300,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(right: 16.0),
+                      child: buildCard(),
+                    );
+                  },
                 ),
-                SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: signUserOut,
-                  child: Text('Logout'),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+
+  Widget buildCard() => Container(
+          child: Column(
+        children: [
+          Image.network("https://picsum.photos//200/250"),
+          Text(
+            "This is a card",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ));
 }
 
 class HomePageWithFab extends StatelessWidget {
@@ -53,4 +94,3 @@ class HomePageWithFab extends StatelessWidget {
     );
   }
 }
-
