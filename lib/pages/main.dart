@@ -32,9 +32,9 @@ class _MainPage extends State<MainPage> {
       child: IndexedStack(
         index: currentPageIndex,
         children: <Widget>[
-          buildHomePage(theme),
-          buildNotificationsPage(theme),
-          buildMessagesPage(theme),
+          HomePage(theme: theme),
+          NotificationsPage(theme: theme),
+          MessagesPage(theme: theme),
         ],
       ),
     );

@@ -54,4 +54,3 @@ class TextInput extends StatelessWidget {
     );
   }
 }
-

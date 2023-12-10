@@ -38,21 +38,11 @@ class _LoginPageState extends State<LoginPage> {
     } on FirebaseAuthException catch (e) {
       print("ERROR SIGN IN");
       Navigator.of(context).pop();
-      if ((e.code == 'user-not-found') || (e.code == 'wrong-password')) {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return const AlertDialog(
-                backgroundColor: Colors.blue,
-                title: Center(
-                  child: Text(
-                    'Error',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              );
-            });
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.code),
+        ),
+      );
     }
   }
 
