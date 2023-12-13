@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'todaydetail.dart';
 
 class HomePage extends StatefulWidget {
   final ThemeData theme;
@@ -12,34 +13,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<String> title = <String>[
-    'Entry A',
-    'Entry B',
-    'Entry C',
-  ];
-  final List<String> imgLinks = <String>[
-    'https://picsum.photos/id/1/200/250',
-    'https://picsum.photos/id/2/200/250',
-    'https://picsum.photos/id/3/200/250',
-  ];
+  List<List<String>> items = [];
 
   Future<void> todayTips() async {
     await FirebaseFirestore.instance
-        .collection('tips')
-        .doc('today')
+        .collection('todaytips')
         .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document data: ${documentSnapshot.data()}');
-        print('Document data: ${documentSnapshot.get('title')}');
-        print('Document data: ${documentSnapshot.get('imgLink')}');
-        setState(() {
-          title.add(documentSnapshot.get('title'));
-          imgLinks.add(documentSnapshot.get('imgLink'));
-        });
-      } else {
-        print('Document does not exist on the database');
-      }
+        .then((querySnapshot) {
+      List<List<String>> firestoreItems = [];
+
+      querySnapshot.docs.forEach((element) {
+        var data = element.data();
+
+        List<String> itemData = [
+          data['title'] ?? '',
+          data['img_link'] ?? '',
+          data['description'] ?? '',
+        ];
+        firestoreItems.add(itemData);
+      });
+
+      setState(() {
+        items = List.from(firestoreItems);
+      });
     });
   }
 
@@ -98,11 +94,25 @@ class _HomePageState extends State<HomePage> {
                 height: 300,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: title.length,
+                  itemCount: items.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(right: 16.0),
-                      child: buildCard(title[index], imgLinks[index]),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailPage(
+                              title: items[index][0],
+                              imgLink: items[index][1],
+                              description: items[index][2],
+                            ),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 16.0),
+                        child: buildCard(items[index][0], items[index][1]),
+                      ),
                     );
                   },
                 ),
@@ -141,4 +151,3 @@ class HomePageWithFab extends StatelessWidget {
     );
   }
 }
-
