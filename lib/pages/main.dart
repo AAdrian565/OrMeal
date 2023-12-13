@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home.dart';
-import 'notification.dart';
-import 'message.dart';
+import 'savedmenu.dart';
+import 'about.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -33,8 +33,8 @@ class _MainPage extends State<MainPage> {
         index: currentPageIndex,
         children: <Widget>[
           HomePage(theme: theme),
-          NotificationsPage(theme: theme),
-          MessagesPage(theme: theme),
+          SavedMenuPage(theme: theme),
+          AboutPage(theme: theme),
         ],
       ),
     );
@@ -61,18 +61,15 @@ class _MainPage extends State<MainPage> {
           label: 'Home',
         ),
         NavigationDestination(
-          icon: Badge(child: Icon(Icons.notifications_sharp)),
-          label: 'Notifications',
+          selectedIcon: Icon(Icons.bookmark),
+          icon: Icon(Icons.bookmark_border_outlined),
+          label: 'Saved menu',
         ),
         NavigationDestination(
-          icon: Badge(
-            label: Text('2'),
-            child: Icon(Icons.messenger_sharp),
-          ),
-          label: 'Messages',
+          icon: Icon(Icons.perm_device_info_rounded),
+          label: 'About Us',
         ),
       ],
     );
   }
 }
-
