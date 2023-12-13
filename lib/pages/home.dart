@@ -138,16 +138,3 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 }
-
-class HomePageWithFab extends StatelessWidget {
-  final ThemeData theme;
-
-  const HomePageWithFab({Key? key, required this.theme}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return HomePage(
-      theme: theme,
-    );
-  }
-}
