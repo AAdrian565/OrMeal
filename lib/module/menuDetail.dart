@@ -5,12 +5,12 @@ class menuDetail extends StatelessWidget {
   final String imgLink;
   final String description;
 
-  const menuDetail(
-      {Key? key,
-      required this.title,
-      required this.imgLink,
-      required this.description})
-      : super(key: key);
+  const menuDetail({
+    Key? key,
+    required this.title,
+    required this.imgLink,
+    required this.description,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,28 +24,25 @@ class menuDetail extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Image.network(imgLink),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(description),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.close),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Image.network(
+                imgLink,
+                width: 300,
+                height: 300,
+                fit: BoxFit.cover,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(description),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+

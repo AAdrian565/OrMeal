@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home.dart';
-import 'package:ormeal/module/menuDetail.dart';
 import 'savedmenu.dart';
+import 'userSettings.dart';
 import 'about.dart';
 
 class MainPage extends StatefulWidget {
@@ -22,24 +22,36 @@ class _MainPage extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: buildAppBar(), // Add this line to include the app bar
       body: buildBody(),
       bottomNavigationBar: buildNavigationBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => menuDetail(
-                title: 'My Title',
-                imgLink: 'https://picsum.photos/200/300',
-                description: 'My Description',
-              ),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.green,
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      title: Row(
+        children: [
+          Image.asset('lib/images/OrMeal.png', height: 40, width: 40),
+          SizedBox(width: 8), // Adjust spacing as needed
+          Text('OrMeal'),
+        ],
       ),
+      actions: [
+        IconButton(
+            icon: Icon(
+              Icons.account_circle,
+              size: 40,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserSettingPage(),
+                ),
+              );
+            }),
+      ],
     );
   }
 
