@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home.dart';
+import 'package:ormeal/module/menuDetail.dart';
 import 'savedmenu.dart';
 import 'about.dart';
 
@@ -23,6 +24,22 @@ class _MainPage extends State<MainPage> {
     return Scaffold(
       body: buildBody(),
       bottomNavigationBar: buildNavigationBar(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => menuDetail(
+                title: 'My Title',
+                imgLink: 'https://picsum.photos/200/300',
+                description: 'My Description',
+              ),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.green,
+      ),
     );
   }
 
