@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
               TextInput(
                 controller: emailController,
                 hintText: 'Email',
+                textInputAction: TextInputAction.next,
               ),
               // password
               const SizedBox(height: 10),
@@ -93,6 +94,10 @@ class _LoginPageState extends State<LoginPage> {
                 controller: passwordController,
                 hintText: 'Password',
                 obscureText: true,
+                onSubmit: (value) {
+                  signUserIn();
+                },
+                textInputAction: TextInputAction.done,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50.0),

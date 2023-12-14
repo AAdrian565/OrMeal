@@ -91,6 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
               TextInput(
                 controller: emailController,
                 hintText: 'Email',
+                textInputAction: TextInputAction.next,
               ),
               // password
               const SizedBox(height: 10),
@@ -98,12 +99,16 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: passwordController,
                 hintText: 'Password',
                 obscureText: true,
+                textInputAction: TextInputAction.next,
               ),
               const SizedBox(height: 10),
               TextInput(
                 controller: confirmPasswordController,
                 hintText: 'Confirm Password',
                 obscureText: true,
+                onSubmit: (value) {
+                  signUserUp();
+                },
               ),
               const SizedBox(height: 10),
               Row(

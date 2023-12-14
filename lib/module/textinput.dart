@@ -4,12 +4,16 @@ class TextInput extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
+  final void Function(String)? onSubmit;
+  final TextInputAction textInputAction;
 
   const TextInput({
     Key? key,
     required this.controller,
     required this.hintText,
     this.obscureText = false,
+    this.onSubmit,
+    this.textInputAction = TextInputAction.done,
   }) : super(key: key);
 
   @override
@@ -48,9 +52,12 @@ class TextInput extends StatelessWidget {
                 color: Colors.white.withOpacity(0.5),
               ),
             ),
+            onFieldSubmitted: onSubmit,
+            textInputAction: textInputAction,
           ),
         ),
       ],
     );
   }
 }
+
