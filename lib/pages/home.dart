@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextEditingController _searchController = TextEditingController();
   List<List<String>> items = [];
 
   Future<void> todayTips() async {
@@ -55,7 +56,8 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SearchButton(context),
+              SearchBar(),
+              // SearchButton(context),
               HomeTitle("Menu"),
               Padding(
                 padding: const EdgeInsets.only(left: 16.0),
@@ -110,6 +112,54 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget SearchBar() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              height: 50,
+              child: TextFormField(
+                onFieldSubmitted: (value) => openMealList(),
+                controller: _searchController,
+                style: TextStyle(color: Colors.green),
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green, width: 2.0),
+                    borderRadius: BorderRadius.circular(90.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green, width: 2.0),
+                    borderRadius: BorderRadius.circular(90.0),
+                  ),
+                  labelText: "Search for ingredients",
+                  labelStyle: TextStyle(
+                    color: Colors.green.withOpacity(0.5),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 8),
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: openMealList,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void openMealList() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SearchPage(query: _searchController.text),
+      ),
+    );
+  }
+
   Center SearchButton(BuildContext context) {
     return Center(
       child: Column(
@@ -119,7 +169,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SearchPage(),
+                  builder: (context) => SearchPage(query: "Chicken"),
                 ),
               );
             },
@@ -133,10 +183,29 @@ class _HomePageState extends State<HomePage> {
               child: Icon(Icons.search, size: 60),
             ),
           ),
+          Container(
+              height: 50,
+              child: TextFormField(
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white, width: 2.0),
+                    borderRadius: BorderRadius.circular(90.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white, width: 2.0),
+                    borderRadius: BorderRadius.circular(90.0),
+                  ),
+                  labelText: "Search for ingredients",
+                  labelStyle: TextStyle(
+                    color: Colors.white.withOpacity(0.5),
+                  ),
+                ),
+              )),
           Text(
-            "SearchButton",
+            "Search Recipe",
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
