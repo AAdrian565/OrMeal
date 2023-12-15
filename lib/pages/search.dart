@@ -25,6 +25,25 @@ class _SearchPage extends State<SearchPage> {
     }
   }
 
+  Future<Meal?> fetchMealID(String id) async {
+    final response = await http.get(
+      Uri.parse('https://www.themealdb.com/api/json/v1/1/lookup.php?i=$id'),
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      final List<dynamic> mealsData = data['meals'];
+
+      if (mealsData.isNotEmpty) {
+        return Meal.fromJson(mealsData[0]);
+      } else {
+        return null;
+      }
+    } else {
+      throw Exception('Failed to load meal');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,38 +94,53 @@ class _SearchPage extends State<SearchPage> {
 
   Widget buildListItem(Meal meal) {
     return Expanded(
-      child: GestureDetector(
-        onTap: () {},
-        child: Card(
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-                child: Image.network(
-                  meal.strMealThumb!,
-                  width: double.infinity,
-                  height: 150,
-                  fit: BoxFit.cover,
-                ),
+        child: GestureDetector(
+      onTap: () async {
+        try {
+          Meal? selectedMeal = await fetchMealID(meal.idMeal);
+          if (selectedMeal != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MealDetailPage(meal: selectedMeal),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  meal.strMeal!,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 16),
-                ),
+            );
+          } else {
+            print('Meal not found');
+          }
+        } catch (e) {
+          print('Error fetching meal details: $e');
+        }
+      },
+      child: Card(
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+              child: Image.network(
+                meal.strMealThumb,
+                width: double.infinity,
+                height: 150,
+                fit: BoxFit.cover,
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                meal.strMeal,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
         ),
       ),
-    );
+    ));
   }
 }
