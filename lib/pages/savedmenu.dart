@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../module/menuDetail.dart';
+import 'package:ormeal/pages/mealDetail.dart';
 
 class SavedMenuPage extends StatelessWidget {
   final ThemeData theme;
@@ -40,16 +40,16 @@ class SavedMenuPage extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => menuDetail(
-                                title: title[index],
-                                imgLink: imgLinks[index],
-                                description: recipe[index],
-                              ),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => menuDetail(
+                          //       title: title[index],
+                          //       imgLink: imgLinks[index],
+                          //       description: recipe[index],
+                          //     ),
+                          //   ),
+                          // );
                         },
                         child: Container(
                           color: Colors.grey,
