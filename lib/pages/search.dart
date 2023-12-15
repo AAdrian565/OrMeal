@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:ormeal/pages/mealDetail.dart';
+import 'package:ormeal/module/class/meal.dart';
 
 class SearchPage extends StatefulWidget {
   final String query;
@@ -45,44 +47,66 @@ class _SearchPage extends State<SearchPage> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('No meals found.'));
           } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                Meal meal = snapshot.data![index];
-                return ListTile(
-                  title: Text(meal.strMeal!),
-                  leading: Image.network(
-                    meal.strMealThumb!,
-                    width: 70,
-                    height: 70,
-                    fit: BoxFit.cover,
-                  ),
-                );
-              },
-            );
+            return buildSearchList(snapshot);
           }
         },
       ),
     );
   }
-}
 
-class Meal {
-  final String? strMeal;
-  final String? strMealThumb;
-  final String? idMeal;
+  Widget buildSearchList(AsyncSnapshot<List<Meal>> snapshot) {
+    return ListView.builder(
+      itemCount: (snapshot.data!.length / 2).ceil(),
+      itemBuilder: (context, index) {
+        final firstItemIndex = index * 2;
 
-  Meal({
-    required this.strMeal,
-    required this.strMealThumb,
-    required this.idMeal,
-  });
+        return Row(
+          children: [
+            buildListItem(snapshot.data![firstItemIndex]),
+            SizedBox(width: 8),
+            snapshot.data!.length > firstItemIndex + 1
+                ? buildListItem(snapshot.data![firstItemIndex + 1])
+                : Expanded(child: Container()),
+          ],
+        );
+      },
+    );
+  }
 
-  factory Meal.fromJson(Map<String, dynamic> json) {
-    return Meal(
-      strMeal: json['strMeal'],
-      strMealThumb: json['strMealThumb'],
-      idMeal: json['idMeal'],
+  Widget buildListItem(Meal meal) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {},
+        child: Card(
+          elevation: 3,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                child: Image.network(
+                  meal.strMealThumb!,
+                  width: double.infinity,
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  meal.strMeal!,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

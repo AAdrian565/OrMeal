@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class menuDetail extends StatelessWidget {
+class mealDetail extends StatelessWidget {
   final String title;
   final String imgLink;
   final String description;
 
-  const menuDetail({
+  const mealDetail({
     Key? key,
     required this.title,
     required this.imgLink,
@@ -45,4 +45,3 @@ class menuDetail extends StatelessWidget {
     );
   }
 }
-
