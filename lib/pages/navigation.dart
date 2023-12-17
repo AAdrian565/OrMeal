@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'home.dart';
-import 'savedmenu.dart';
-import 'userSettings.dart';
-import 'about.dart';
+import 'package:flutter/material.dart';
+import 'package:ormeal/pages/about.dart';
+import 'package:ormeal/pages/home.dart';
+import 'package:ormeal/pages/mealSaved.dart';
+import 'package:ormeal/pages/userSettings.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class _MainPage extends State<MainPage> {
       title: Row(
         children: [
           Image.asset('lib/images/OrMeal.png', height: 40, width: 40),
-          SizedBox(width: 8), // Adjust spacing as needed
+          SizedBox(width: 8),
           Text('OrMeal'),
         ],
       ),
@@ -62,7 +62,7 @@ class _MainPage extends State<MainPage> {
         index: currentPageIndex,
         children: <Widget>[
           HomePage(theme: theme),
-          SavedMenuPage(theme: theme),
+          MealSavedPage(theme: theme),
           AboutPage(theme: theme),
         ],
       ),
@@ -92,7 +92,7 @@ class _MainPage extends State<MainPage> {
         NavigationDestination(
           selectedIcon: Icon(Icons.bookmark),
           icon: Icon(Icons.bookmark_border_outlined),
-          label: 'Saved menu',
+          label: 'Saved Meal',
         ),
         NavigationDestination(
           icon: Icon(Icons.perm_device_info_rounded),

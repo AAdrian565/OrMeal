@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:ormeal/pages/calculator.dart';
-import 'todaydetail.dart';
-import 'search.dart';
+import 'package:ormeal/pages/search.dart';
+import 'package:ormeal/pages/todaydetail.dart';
 
 class HomePage extends StatefulWidget {
   final ThemeData theme;
@@ -57,7 +57,6 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SearchBar(),
-              // SearchButton(context),
               HomeTitle("Menu"),
               Padding(
                 padding: const EdgeInsets.only(left: 16.0),

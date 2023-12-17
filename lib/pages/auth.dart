@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:ormeal/pages/login_or_register.dart';
-import 'package:ormeal/pages/main.dart';
+import 'package:ormeal/pages/navigation.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage ({Key? key}) : super(key: key);
