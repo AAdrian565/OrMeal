@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:ormeal/pages/mealDetail.dart';
 import 'package:ormeal/module/class/meal.dart';
+import 'package:ormeal/module/class/mealService.dart';
 
 class SearchPage extends StatefulWidget {
   final String query;
@@ -13,37 +12,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPage extends State<SearchPage> {
-  Future<List<Meal>> fetchMeal() async {
-    final response = await http.get(Uri.parse(
-        'https://www.themealdb.com/api/json/v1/1/filter.php?i=${widget.query}'));
-
-    if (response.statusCode == 200) {
-      final List<dynamic> mealsData = jsonDecode(response.body)['meals'];
-      return mealsData.map((mealJson) => Meal.fromJson(mealJson)).toList();
-    } else {
-      throw Exception('Failed to load meals');
-    }
-  }
-
-  Future<Meal?> fetchMealID(String id) async {
-    final response = await http.get(
-      Uri.parse('https://www.themealdb.com/api/json/v1/1/lookup.php?i=$id'),
-    );
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      final List<dynamic> mealsData = data['meals'];
-
-      if (mealsData.isNotEmpty) {
-        return Meal.fromJson(mealsData[0]);
-      } else {
-        return null;
-      }
-    } else {
-      throw Exception('Failed to load meal');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,14 +24,14 @@ class _SearchPage extends State<SearchPage> {
 
   Container mealListBuilder() {
     return Container(
-      child: FutureBuilder<List<Meal>>(
-        future: fetchMeal(),
+      child: FutureBuilder<List<Meal>?>(
+        future: MealService.fetchMeals('${widget.query}'),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          } else if (snapshot.data == null || snapshot.data!.isEmpty) {
             return Center(child: Text('No meals found.'));
           } else {
             return buildSearchList(snapshot);
@@ -73,7 +41,7 @@ class _SearchPage extends State<SearchPage> {
     );
   }
 
-  Widget buildSearchList(AsyncSnapshot<List<Meal>> snapshot) {
+  Widget buildSearchList(AsyncSnapshot<List<Meal>?> snapshot) {
     return ListView.builder(
       itemCount: (snapshot.data!.length / 2).ceil(),
       itemBuilder: (context, index) {
@@ -97,7 +65,7 @@ class _SearchPage extends State<SearchPage> {
         child: GestureDetector(
       onTap: () async {
         try {
-          Meal? selectedMeal = await fetchMealID(meal.idMeal);
+          Meal? selectedMeal = await MealService.fetchMealByID(meal.idMeal);
           if (selectedMeal != null) {
             Navigator.push(
               context,

@@ -5,12 +5,21 @@ class MealDetailPage extends StatelessWidget {
   final Meal meal;
 
   MealDetailPage({required this.meal});
+  final isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.strMeal),
+        actions: [
+          IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: isFavorite ? Colors.red : null,
+              ),
+              onPressed: () {}),
+        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -79,4 +88,3 @@ class MealDetailPage extends StatelessWidget {
     return widgets;
   }
 }
-
