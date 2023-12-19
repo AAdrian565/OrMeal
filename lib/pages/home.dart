@@ -64,7 +64,8 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Row(
                       children: [
-                        HomeButton(context, CalculatorWidget(), 'Calculator'),
+                        HomeButton(context, CalculatorWidget(), Icons.calculate,
+                            "BMI Calculator")
                       ],
                     ),
                   ],
@@ -227,7 +228,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget HomeButton(
-      BuildContext context, Widget destinationWidget, String buttonText) {
+    BuildContext context,
+    Widget destinationWidget,
+    IconData icon,
+    String buttonText,
+  ) {
     return ElevatedButton(
       onPressed: () {
         Navigator.push(
@@ -243,8 +248,21 @@ class _HomePageState extends State<HomePage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
+        elevation: 3,
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       ),
-      child: Text(buttonText),
+      child: Row(
+        children: [
+          Icon(icon),
+          Text(
+            buttonText,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

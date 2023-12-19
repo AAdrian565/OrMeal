@@ -22,6 +22,7 @@ class _UserSettingPage extends State<UserSettingPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            userProfile(),
             HomeTitle("Account"),
             SettingButton(
                 buttonText: "Logout",
@@ -35,9 +36,39 @@ class _UserSettingPage extends State<UserSettingPage> {
     );
   }
 
+  Padding userProfile() {
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Column(
+        children: [
+          user?.photoURL != null
+              ? Container(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(user?.photoURL ?? ''),
+                  ),
+                )
+              : Container(
+                  child: Icon(
+                    Icons.account_circle,
+                    size: 100,
+                  ),
+                ),
+          Text(
+            user?.email ?? '',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget SettingButton({
     required String buttonText,
-    required VoidCallback onTap,
+    VoidCallback? onTap,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -65,8 +96,9 @@ class _UserSettingPage extends State<UserSettingPage> {
   }
 
   Widget HomeTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0),
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.only(left: 16.0, top: 32.0),
       child: Text(
         title,
         style: TextStyle(
