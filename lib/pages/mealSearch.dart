@@ -64,8 +64,16 @@ class _SearchPage extends State<SearchPage> {
     return Expanded(
         child: GestureDetector(
       onTap: () async {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Center(child: CircularProgressIndicator());
+          },
+        );
         try {
           Meal? selectedMeal = await MealService.fetchMealByID(meal.idMeal);
+          Navigator.pop(context);
+
           if (selectedMeal != null) {
             Navigator.push(
               context,
@@ -77,38 +85,43 @@ class _SearchPage extends State<SearchPage> {
             print('Meal not found');
           }
         } catch (e) {
+          Navigator.pop(context);
           print('Error fetching meal details: $e');
         }
       },
-      child: Card(
-        elevation: 3,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-              child: Image.network(
-                meal.strMealThumb,
-                width: double.infinity,
-                height: 150,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                meal.strMeal,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-          ],
-        ),
-      ),
+      child: buildCard(meal),
     ));
+  }
+
+  Card buildCard(Meal meal) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+            child: Image.network(
+              meal.strMealThumb,
+              width: double.infinity,
+              height: 150,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              meal.strMeal,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

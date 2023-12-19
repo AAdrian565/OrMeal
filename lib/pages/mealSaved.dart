@@ -1,41 +1,40 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ormeal/module/class/meal.dart';
-import 'package:ormeal/module/class/mealService.dart';
 import 'package:ormeal/pages/mealDetail.dart';
+import 'package:ormeal/module/class/mealService.dart';
 
+// ignore: must_be_immutable
 class MealSavedPage extends StatefulWidget {
   final ThemeData theme;
+  List<Meal> favoriteMeals;
 
-  MealSavedPage({Key? key, required this.theme}) : super(key: key);
+  MealSavedPage({Key? key, required this.theme, required this.favoriteMeals})
+      : super(key: key);
 
   @override
   State<MealSavedPage> createState() => _MealSavedPageState();
 }
 
 class _MealSavedPageState extends State<MealSavedPage> {
-  final currentUser = FirebaseAuth.instance.currentUser;
+  bool isFavoriteMealsLoading = false;
 
-  Future<List<Meal>> getFavoriteMeals() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(currentUser!.uid)
-        .collection('favorites')
-        .get();
+  Future<void> _refreshFavoriteMeals() async {
+    setState(() {
+      isFavoriteMealsLoading = true;
+    });
 
-    List<String> favoriteMealIds = [];
-    for (QueryDocumentSnapshot document in querySnapshot.docs) {
-      favoriteMealIds.add(document.id);
+    try {
+      List<Meal> meals = await MealService.getFavoriteMeals();
+      setState(() {
+        widget.favoriteMeals = List.from(meals);
+      });
+    } catch (error) {
+      print('Error loading favorite meals: $error');
+    } finally {
+      setState(() {
+        isFavoriteMealsLoading = false;
+      });
     }
-    List<Meal> favoriteMeals = [];
-    for (String mealId in favoriteMealIds) {
-      Meal? meal = await MealService.fetchMealByID(mealId);
-      if (meal != null) {
-        favoriteMeals.add(meal);
-      }
-    }
-    return favoriteMeals;
   }
 
   @override
@@ -43,46 +42,73 @@ class _MealSavedPageState extends State<MealSavedPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.fromLTRB(45.0, 20.0, 45.0, 0.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.0),
-            Expanded(
-              child: FutureBuilder<List<Meal>>(
-                future: getFavoriteMeals(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error loading meals'),
-                    );
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(
-                      child: Text('No saved meals'),
-                    );
-                  } else {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          children: [
-                            mealCard(context, snapshot, index),
-                            SizedBox(height: 10.0),
-                          ],
-                        );
-                      },
-                    );
-                  }
-                },
+        child: RefreshIndicator(
+          onRefresh: _refreshFavoriteMeals,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20.0),
+              Expanded(
+                child: widget.favoriteMeals.isEmpty
+                    ? (isFavoriteMealsLoading
+                        ? Center(child: CircularProgressIndicator())
+                        : Center(child: Text('No saved meals')))
+                    : mealList(),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  ListView mealList() {
+    return ListView.builder(
+      itemCount: widget.favoriteMeals.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MealDetailPage(
+                      meal: widget.favoriteMeals[index],
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                color: Colors.grey,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          '${widget.favoriteMeals[index].strMeal}',
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10.0),
+                      width: 150,
+                      height: 100,
+                      child: Image.network(
+                        widget.favoriteMeals[index].strMealThumb,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 10.0),
+          ],
+        );
+      },
     );
   }
 

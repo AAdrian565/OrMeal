@@ -4,6 +4,8 @@ import 'package:ormeal/pages/about.dart';
 import 'package:ormeal/pages/home.dart';
 import 'package:ormeal/pages/mealSaved.dart';
 import 'package:ormeal/pages/userSettings.dart';
+import 'package:ormeal/module/class/meal.dart';
+import 'package:ormeal/module/class/mealService.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -14,15 +16,34 @@ class MainPage extends StatefulWidget {
 
 class _MainPage extends State<MainPage> {
   int currentPageIndex = 0;
+  late List<Meal> favoriteMeals;
+
+  @override
+  void initState() {
+    super.initState();
+    favoriteMeals = [];
+    initializeFavoriteMeals();
+  }
 
   signUserOut() {
     FirebaseAuth.instance.signOut();
   }
 
+  Future<void> initializeFavoriteMeals() async {
+    try {
+      List<Meal> meals = await MealService.getFavoriteMeals();
+      setState(() {
+        favoriteMeals = meals;
+      });
+    } catch (error) {
+      print('Error loading favorite meals: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(), // Add this line to include the app bar
+      appBar: buildAppBar(),
       body: buildBody(),
       bottomNavigationBar: buildNavigationBar(),
     );
@@ -62,7 +83,7 @@ class _MainPage extends State<MainPage> {
         index: currentPageIndex,
         children: <Widget>[
           HomePage(theme: theme),
-          MealSavedPage(theme: theme),
+          MealSavedPage(theme: theme, favoriteMeals: favoriteMeals),
           AboutPage(theme: theme),
         ],
       ),
