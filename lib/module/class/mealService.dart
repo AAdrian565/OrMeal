@@ -1,14 +1,12 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:ormeal/module/class/meal.dart';
-import 'dart:convert';
 
 class MealService {
   static Future<List<Meal>?> fetchMeals(String query) async {
     final response = await http.get(Uri.parse(
         'https://www.themealdb.com/api/json/v1/1/filter.php?i=$query'));
-
-    print(response.body);
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
       final dynamic responseBody = jsonDecode(response.body);

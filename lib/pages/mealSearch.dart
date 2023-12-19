@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ormeal/pages/mealDetail.dart';
 import 'package:ormeal/module/class/meal.dart';
 import 'package:ormeal/module/class/mealService.dart';
+import 'package:ormeal/pages/mealDetail.dart';
 
 class SearchPage extends StatefulWidget {
   final String query;

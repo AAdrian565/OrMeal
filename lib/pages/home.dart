@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ormeal/pages/calculator.dart';
-import 'package:ormeal/pages/search.dart';
+import 'package:ormeal/pages/mealSearch.dart';
 import 'package:ormeal/pages/todaydetail.dart';
 
 class HomePage extends StatefulWidget {
