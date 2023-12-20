@@ -95,31 +95,35 @@ class _MainPage extends State<MainPage> {
   }
 
   Widget buildNavigationBarWidget(int currentIndex) {
-    return NavigationBar(
-      onDestinationSelected: (int index) {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      onTap: (int index) {
         setState(() {
           currentPageIndex = index;
         });
       },
-      backgroundColor: Colors.green,
-      // indicatorColor: Colors.blue,
-      selectedIndex: currentIndex,
-      destinations: const <Widget>[
-        NavigationDestination(
-          selectedIcon: Icon(Icons.home),
+      currentIndex: currentIndex,
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
+          activeIcon: Icon(Icons.home_filled),
           label: 'Home',
         ),
-        NavigationDestination(
-          selectedIcon: Icon(Icons.bookmark),
+        BottomNavigationBarItem(
           icon: Icon(Icons.bookmark_border_outlined),
+          activeIcon: Icon(Icons.bookmark),
           label: 'Saved Meal',
         ),
-        NavigationDestination(
+        BottomNavigationBarItem(
           icon: Icon(Icons.perm_device_info_rounded),
+          activeIcon: Icon(Icons.perm_device_info),
           label: 'About Us',
         ),
       ],
+      backgroundColor: Colors.green,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.grey[300],
+      showUnselectedLabels: false,
     );
   }
 }
