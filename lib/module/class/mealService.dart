@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,23 +28,29 @@ class MealService {
     }
   }
 
-  static Future<List<Meal>?> fetchMeals(String query) async {
-    final response = await http.get(Uri.parse(
-        'https://www.themealdb.com/api/json/v1/1/filter.php?i=$query'));
+  static Future<List<Meal>?> fetchMeals(List<String> ingredients) async {
+    List<Meal> allMeals = [];
 
-    if (response.statusCode == 200) {
-      final dynamic responseBody = jsonDecode(response.body);
+    for (String ingredient in ingredients) {
+      final response = await http.get(Uri.parse(
+          'https://www.themealdb.com/api/json/v1/1/filter.php?i=$ingredient'));
 
-      if (responseBody['meals'] != null) {
-        final List<dynamic> mealsData = responseBody['meals'];
-        return mealsData.map((mealJson) => Meal.fromJson(mealJson)).toList();
+      if (response.statusCode == 200) {
+        final dynamic responseBody = jsonDecode(response.body);
+
+        if (responseBody['meals'] != null) {
+          final List<dynamic> mealsData = responseBody['meals'];
+          List<Meal> meals =
+              mealsData.map((mealJson) => Meal.fromJson(mealJson)).toList();
+          allMeals.addAll(meals);
+        } else {
+          allMeals.addAll([]);
+        }
       } else {
-        // Return null when "meals" is null
-        return null;
+        throw Exception('Failed to load meals for ingredient: $ingredient');
       }
-    } else {
-      throw Exception('Failed to load meals');
     }
+    return allMeals.isNotEmpty ? allMeals : null;
   }
 
   static Future<List<Meal>> getFavoriteMeals() async {
@@ -68,5 +75,47 @@ class MealService {
 
     return favoriteMeals;
   }
-}
 
+// In mealRecommendation.dart
+  static Future<List<Meal>?> recommendMeals(
+      List<String> ingredients, List<Meal> allMeals) async {
+    if (ingredients.isEmpty || allMeals.isEmpty) {
+      return null;
+    }
+    List<Meal> test = allMeals;
+
+    // Step 1: Calculate TF-IDF
+    Map<String, double> tfIdfMap = {};
+
+    allMeals.forEach((meal) {
+      Set<String> uniqueIngredients = Set.from(meal.ingredients
+          .where((ingredient) => ingredient != null)
+          .map((ingredient) => ingredient!));
+
+      ingredients.forEach((queryIngredient) {
+        double tf = uniqueIngredients.contains(queryIngredient) ? 1.0 : 0.0;
+        double idf =
+            log(allMeals.length / (1 + (tfIdfMap[queryIngredient] ?? 0)));
+
+        tfIdfMap[queryIngredient] = (tfIdfMap[queryIngredient] ?? 0) + tf * idf;
+      });
+    });
+
+    // Step 2: Sort meals by their total TF-IDF scores
+    allMeals.sort((a, b) {
+      double aScore = ingredients.fold(
+          0, (score, ingredient) => score + (tfIdfMap[ingredient] ?? 0));
+      double bScore = ingredients.fold(
+          0, (score, ingredient) => score + (tfIdfMap[ingredient] ?? 0));
+      return bScore.compareTo(aScore);
+    });
+
+    // Print the results for testing
+    for (int i = 0; i < allMeals.length; i++) {
+      print(test[i].strMeal == allMeals[i].strMeal);
+    }
+
+    // Return the recommended meals
+    return allMeals;
+  }
+}
