@@ -23,10 +23,10 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
     if (bmi < 18.5) {
       interpretation = "Underweight";
       cardColor = Colors.red;
-    } else if (bmi >= 18.5 && bmi < 24.9) {
+    } else if (bmi >= 18.5 && bmi < 25) {
       interpretation = "Normal weight";
       cardColor = Colors.green;
-    } else if (bmi >= 25 && bmi < 29.9) {
+    } else if (bmi >= 25 && bmi < 30) {
       interpretation = "Overweight";
       cardColor = Colors.yellow;
     } else {
