@@ -23,9 +23,11 @@ class _SearchPage extends State<SearchPage> {
   }
 
   Container mealListBuilder() {
+    List<String> query = widget.query.split(' ');
+
     return Container(
       child: FutureBuilder<List<Meal>?>(
-        future: (MealService.fetchMeals(widget.query.split(' '))),
+        future: _prepareMealList(query),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -39,6 +41,11 @@ class _SearchPage extends State<SearchPage> {
         },
       ),
     );
+  }
+
+  Future<List<Meal>?> _prepareMealList(List<String> query) async {
+    List<Meal> allMeals = await MealService.fetchMeals(query) ?? [];
+    return MealService.recommendMeals(query, allMeals);
   }
 
   Widget buildSearchList(AsyncSnapshot<List<Meal>?> snapshot) {

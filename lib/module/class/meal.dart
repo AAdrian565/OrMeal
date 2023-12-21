@@ -10,6 +10,7 @@ class Meal {
   final String? strYoutube;
   final List<String?> ingredients;
   final List<String?> measures;
+  int score = 0;
 
   Meal({
     required this.strMeal,
