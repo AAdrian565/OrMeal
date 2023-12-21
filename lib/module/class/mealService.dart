@@ -42,6 +42,14 @@ class MealService {
           final List<dynamic> mealsData = responseBody['meals'];
           List<Meal> meals =
               mealsData.map((mealJson) => Meal.fromJson(mealJson)).toList();
+
+          // for (Meal meal in meals) {
+          //   Meal? fullMeal = await fetchMealByID(meal.idMeal);
+          //   if (fullMeal != null) {
+          //     allMeals.add(fullMeal);
+          //   }
+          // }
+
           allMeals.addAll(meals);
         } else {
           allMeals.addAll([]);
@@ -76,7 +84,6 @@ class MealService {
     return favoriteMeals;
   }
 
-// In mealRecommendation.dart
   static Future<List<Meal>?> recommendMeals(
       List<String> ingredients, List<Meal> allMeals) async {
     if (ingredients.isEmpty || allMeals.isEmpty) {

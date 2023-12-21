@@ -27,7 +27,8 @@ class _SearchPage extends State<SearchPage> {
 
     return Container(
       child: FutureBuilder<List<Meal>?>(
-        future: _prepareMealList(query),
+        // future: _prepareMealList(query),
+        future: MealService.fetchMeals(query),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
