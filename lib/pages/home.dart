@@ -85,6 +85,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       height: 300,
       child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         child: Row(
           children: items.map((item) {
@@ -290,7 +291,15 @@ class _HomePageState extends State<HomePage> {
   Widget buildCard(String title, String imgLink) => Container(
         child: Column(
           children: [
-            Image.network(imgLink),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                fit: BoxFit.cover,
+                imgLink,
+                width: 200,
+                height: 250,
+              ),
+            ),
             Text(
               title,
               style: TextStyle(

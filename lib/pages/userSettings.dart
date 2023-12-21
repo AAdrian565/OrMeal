@@ -24,12 +24,23 @@ class _UserSettingPage extends State<UserSettingPage> {
           children: [
             userProfile(),
             HomeTitle("Account"),
+            SettingButton(buttonText: "User Settings"),
             SettingButton(
                 buttonText: "Logout",
+                textColor: Colors.red,
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.red,
+                ),
                 onTap: () {
                   signUserOut();
                   Navigator.pop(context);
                 }),
+            HomeTitle("General"),
+            SettingButton(buttonText: "Settings"),
+            SettingButton(buttonText: "Language"),
+            SettingButton(buttonText: "Terms & Privacy"),
+            SettingButton(buttonText: "Help & Support"),
           ],
         ),
       ),
@@ -69,25 +80,45 @@ class _UserSettingPage extends State<UserSettingPage> {
   Widget SettingButton({
     required String buttonText,
     VoidCallback? onTap,
+    Color? textColor,
+    Icon? icon, // New optional parameter for the icon
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Colors.grey,
-              width: 0.5,
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.grey,
+                width: 0.5,
+              ),
             ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              buttonText,
-              style: TextStyle(fontSize: 20),
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      buttonText,
+                      style: TextStyle(
+                        color: textColor ?? Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                if (icon != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: icon,
+                  ),
+              ],
             ),
           ),
         ),

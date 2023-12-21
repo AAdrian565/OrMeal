@@ -41,7 +41,7 @@ class _MealSavedPageState extends State<MealSavedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(45.0, 20.0, 45.0, 0.0),
+        padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
         child: RefreshIndicator(
           onRefresh: _refreshFavoriteMeals,
           child: Column(
@@ -80,18 +80,14 @@ class _MealSavedPageState extends State<MealSavedPage> {
                   ),
                 );
               },
-              child: Container(
-                color: Colors.grey,
+              child: Card(
+                color: Colors.grey[200],
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          '${widget.favoriteMeals[index].strMeal}',
-                        ),
-                      ),
-                    ),
                     Container(
                       padding: EdgeInsets.all(10.0),
                       width: 150,
@@ -99,6 +95,14 @@ class _MealSavedPageState extends State<MealSavedPage> {
                       child: Image.network(
                         widget.favoriteMeals[index].strMealThumb,
                         fit: BoxFit.cover,
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          '${widget.favoriteMeals[index].strMeal}',
+                        ),
                       ),
                     ),
                   ],

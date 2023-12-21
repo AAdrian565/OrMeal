@@ -97,6 +97,10 @@ class _MainPage extends State<MainPage> {
   Widget buildNavigationBarWidget(int currentIndex) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.green,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.grey[300],
+      showUnselectedLabels: false,
       onTap: (int index) {
         setState(() {
           currentPageIndex = index;
@@ -120,10 +124,6 @@ class _MainPage extends State<MainPage> {
           label: 'About Us',
         ),
       ],
-      backgroundColor: Colors.green,
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Colors.grey[300],
-      showUnselectedLabels: false,
     );
   }
 }
