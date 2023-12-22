@@ -23,7 +23,7 @@ class _SearchPage extends State<SearchPage> {
   }
 
   Container mealListBuilder() {
-    List<String> query = widget.query.split(' ');
+    List<String> query = widget.query.trim().split(' ');
 
     return Container(
       child: FutureBuilder<List<Meal>?>(
